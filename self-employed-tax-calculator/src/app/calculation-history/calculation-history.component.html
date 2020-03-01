@@ -1,0 +1,86 @@
+<div class="container">
+    <div>
+        <h2>Historie kalkulací</h2>
+        <div class="form-group row">
+            <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary" (click)="delHistory()">Smazat všechny záznamy</button>
+            </div>
+        </div>
+        <div *ngFor="let obj of arr">
+            <h3>Přehled kalkulace</h3>
+            <div class="data-boxes">
+                <div class="data-box">
+                    <div class="row line-2">
+                        <span class="col-sm-5">Výše příjmů:</span>
+                        <span class="col-sm-4">{{obj.income | number:'':'cs'}}</span>
+                    </div>
+                    <div class="row line-2">
+                        <span class="col-sm-5">Uplatnění výdajů:</span>
+                        <span class="col-sm-4">{{obj.expenseWay}}</span>
+                    </div>
+                    <div class="row line-2">
+                        <span class="col-sm-5">Výše výdajů:</span>
+                        <span class="col-sm-4">  {{obj.expense | number:'':'cs'}}
+                        </span>
+                    </div>
+                    <div class="row line-2">
+                        <span class="col-sm-5">Výše daně:</span>
+                        <span class="col-sm-4">{{obj.taxAfterDiscounts | number:'':'cs'}}</span>
+                    </div>
+                    <div class="row line-2">
+                        <span class="col-sm-5">Výše sociálního pojištění:</span>
+                        <span class="col-sm-4">{{obj.socialInsurance | number:'':'cs'}}</span>
+                    </div>
+                    <div class="row line-2">
+                        <span class="col-sm-5">Výše zdravotního pojištění:</span>
+                        <span class="col-sm-4">{{obj.healthInsurance | number:'':'cs'}}</span>
+                    </div>
+                    <div class="row line-2">
+                        <span class="col-sm-5">Odvody celkem:</span>
+                        <span class="col-sm-4">{{obj.contributionsTotal | number:'':'cs'}}</span>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary" (click)="delItem(obj)">Smazat záznam</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="data-box bold">
+                    <div class="row line-2">
+                        <div class="col-sm-7">
+                            Čistý roční příjem před zahrnutím výdajů:
+                        </div>
+                        <div class="col-sm-4">
+                            {{obj.netAnnualIncome | number:'':'cs'}} Kč
+                        </div>
+                    </div>
+                    <div class="row line-2">
+                        <div class="col-sm-7">
+                            Čistý měsíční příjem před zahrnutím výdajů:
+                        </div>
+                        <div class="col-sm-4">
+                            {{obj.netMonthIncome | number:'':'cs'}} Kč
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row line-2">
+                        <div class="col-sm-7">
+                            Čistý roční příjem po odečtení výdajů:
+                        </div>
+                        <div class="col-sm-4">
+                            {{obj.netAnnualIncomeAfterExpenses | number:'':'cs'}} Kč
+                        </div>
+                    </div>
+                    <div class="row line-2">
+                        <div class="col-sm-7">
+                            Čistý měsíční příjem po odečtení výdajů:
+                        </div>
+                        <div class="col-sm-4">
+                            {{obj.netMonthIncomeAfterExpenses | number:'':'cs'}} Kč
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

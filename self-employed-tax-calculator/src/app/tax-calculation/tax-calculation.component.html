@@ -1,0 +1,276 @@
+<div class="container">
+    <form [formGroup]="calcForm" (ngSubmit)="onSubmit()">
+        <div>
+            <h2>Vstupní údaje</h2>
+            <div>
+                <h3>Příjmy a výdaje</h3>
+                <div formGroupName="inputsForm">
+                    <div class="form-group row">
+                        <label for="inputIncome" class="col-sm-4 col-form-label">Příjmy z podnikání a jiné výdělečné činnosti</label>
+                        <div class="col-sm-4">
+                            <input type="number" formControlName="income" class="form-control" id="inputIncome" placeholder="Kč">
+                            <span class="notes" *ngIf="!calcForm.get('inputsForm.income').valid && calcForm.get('inputsForm.income').touched || 
+                                                        calcForm.get('inputsForm.income').value === 0 && calcForm.get('inputsForm.income').touched">
+                                Výše příjmů je povinný údaj a nesmí být 0!
+                            </span>
+                            <span class="notes" *ngIf="calcForm.get('inputsForm.income').value > 2000000">
+                                Výše Vašich příjmů je vyšší než {{limits.percIncome | number:'':'cs'}} Kč, je nutné uplatnit Skutečné výdaje!
+                            </span>
+                        </div>
+                    </div>
+                    <div >
+                        <div class="form-group row">
+                            <legend class="col-form-label col-sm-4 pt-0">Výdaje uplatňuji</legend>
+                            <div class="radio col-sm-2" 
+                                *ngFor="let expenseWay of expenses"> 
+                                <label>
+                                    <input type="radio" formControlName="expenseWay" [value]="expenseWay"> {{ expenseWay }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="calcForm.get('inputsForm.expenseWay').value === 'Paušálem'">
+                            <div class="col-sm-4">
+                                Vaše paušální výdaje jsou ve výši
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <select class="form-control" formControlName="percentageSelect" id="select">
+                                        <option [value]="percentage" *ngFor="let percentage of percentages">{{ percentage * 100 }} % </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="calcForm.get('inputsForm.expenseWay').value === 'Skutečné výdaje'">
+                            <div class="col-sm-4">
+                                Vaše skutečné výdaje jsou ve výši
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="number" formControlName="realExpensesAmount" class="form-control" id="inputExpenses" placeholder="Kč">
+                            </div>
+                        </div>
+                    </div >
+                </div>
+            </div>
+            <div>
+                <h3>Nezdanitelné části základu daně</h3>
+                <div formGroupName="notBasisForm">
+                    <div class="form-group row">
+                    <label for="inputDonates" class="col-sm-4 col-form-label">Hodnota darů</label>
+                    <div class="col-sm-4">
+                        <input type="number" formControlName="donates" class="form-control" id="inputDonates" placeholder="Kč">
+                    </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputDonates" class="col-sm-4 col-form-label">Penzijní připojištění</label>
+                        <div class="col-sm-4">
+                        <input type="number" formControlName="pension" class="form-control" id="inputPension" placeholder="Kč">
+                        <span class="notes" *ngIf="calcForm.get('notBasisForm.pension').value > 24000">
+                            Částka nesmí být vyšší než {{limits.pensLifeIns | number:'':'cs'}}!
+                        </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputDonates" class="col-sm-4 col-form-label">Životní pojištění</label>
+                        <div class="col-sm-4">
+                        <input type="number" formControlName="lifeIns" class="form-control" id="inputLifeIns" placeholder="Kč">
+                        <span class="notes" *ngIf="calcForm.get('notBasisForm.lifeIns').value > 24000">
+                            Částka nesmí být vyšší než {{limits.pensLifeIns | number:'':'cs'}}!
+                        </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputDonates" class="col-sm-4 col-form-label">Zaplacené úroky</label>
+                        <div class="col-sm-4">
+                        <input type="number" formControlName="interest" class="form-control" id="inputInterest" placeholder="Kč">
+                        <span class="notes" *ngIf="calcForm.get('notBasisForm.interest').value > 300000">
+                            Částka nesmí být vyšší než {{limits.maxInterest | number:'':'cs'}}!
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3>Daň</h3>
+                <div formGroupName="taxForm">
+                    <div class="form-group row">
+                        <div class="col-sm-4">Sleva na poplatníka</div>
+                        <div class="col-sm-4">
+                        <div class="form-check">
+                            <input class="checkbox" formControlName="taxpayerDis" type="checkbox">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-4">Sleva na manžela/manželku</div>
+                        <div class="col-sm-4">
+                        <div class="form-check">
+                            <input class="checkbox" formControlName="partnerDis" type="checkbox">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-4">Sleva na studenta</div>
+                        <div class="col-sm-1">
+                        <div class="form-check">
+                            <input class="checkbox" formControlName="studentDis" type="checkbox">
+                        </div>
+                        </div>
+                        <div class="col-sm-4" *ngIf="calcForm.get('taxForm.studentDis').value === true">
+                            <div>
+                                <input type="number" formControlName="studentMonths" class="form-control" placeholder="počet měsíců">
+                            </div>
+                            <span class="notes" *ngIf="!calcForm.get('taxForm.studentMonths').valid">
+                                Zadejte počet měsíců pro uplatnění slevy na studenta!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="schoolFees" class="col-sm-4 col-form-label">Zaplacené školkovné</label>
+                        <div class="col-sm-4">
+                            <input type="number" formControlName="schoolFees" class="form-control" id="schoolFees" placeholder="Kč">
+                            <span class="notes" *ngIf="calcForm.get('taxForm.schoolFees').value > 13350">
+                                Částka nesmí být vyšší než {{limits.schFees | number:'':'cs'}}!
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputDeposit" class="col-sm-4 col-form-label">Zaplacené zálohy na daň</label>
+                        <div class="col-sm-4">
+                        <input type="number" formControlName="deposit" class="form-control" id="inputDeposit" placeholder="Kč">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>    
+                <div class="form-group row">
+                    <div class="col-sm-4">Uložit výpočet do paměti prohlížeče</div>
+                    <div class="col-sm-4">
+                    <div class="form-check">
+                        <input class="checkbox" formControlName="saving" type="checkbox">
+                    </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="col-sm-4"></span>
+                    <span class="note col-sm-4" *ngIf="!calcForm.valid && calcForm.touched">
+                        Údaje nejsou validní nebo chybí!
+                    </span>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary" [disabled]="!calcForm.valid">Vypočítat</button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-primary" (click)="cleanForm()">Vyčistit formulář</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div *ngIf="submitted">
+        <h2>Vypočtené údaje</h2>
+        <div class="row line">
+            <div class="col-sm-4 bold">
+                Čistý roční příjem před zahrnutím výdajů:
+            </div>
+            <div class="col-sm-3 bold">
+                {{calcData.netAnnualIncome | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4 bold">
+                Čistý měsíční příjem před zahrnutím výdajů:
+            </div>
+            <div class="col-sm-3 bold">
+                {{calcData.netMonthIncome | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4 bold">
+                Čistý roční příjem po odečtení výdajů:
+            </div>
+            <div class="col-sm-3 bold">
+                {{calcData.netAnnualIncomeAfterExpenses | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4 bold">
+                Čistý měsíční příjem po odečtení výdajů:
+            </div>
+            <div class="col-sm-3 bold">
+                {{calcData.netMonthIncomeAfterExpenses | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <br>
+        <div class="row line">
+            <div class="col-sm-4">
+                Základ daně ponížený o nezdanitelné části:
+            </div>
+            <div class="col-sm-3">
+                {{calcData.roundedTaxBasisWithout | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4">
+                Výše daně:
+            </div>
+            <div class="col-sm-3">
+                {{calcData.taxAmount | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4">
+                Slevy celkem:
+            </div>
+            <div class="col-sm-3">
+                {{calcData.discountsTotal | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4">
+                Daň po slevě:
+            </div>
+            <div class="col-sm-3">
+                {{calcData.taxAfterDiscounts | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4">
+                Výše nedoplatku(+)/přeplatku(-) na dani
+            </div>
+            <div class="col-sm-3">
+                {{calcData.taxAfterDeposit | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <br>
+        <div class="row line">
+            <div class="col-sm-4">
+                Sociální pojištění celkem:
+            </div>
+            <div class="col-sm-3">
+                {{calcData.socialInsurance | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <div class="row line">
+            <div class="col-sm-4">
+                Zdravotní pojištění celkem:
+            </div>
+            <div class="col-sm-3">
+                {{calcData.healthInsurance | number:'':'cs'}} Kč
+            </div>
+        </div>
+        <br>
+        <div class="row line">
+            <div class="col-sm-4">
+                Odvody celkem:
+            </div>
+            <div class="col-sm-3">
+                {{calcData.contributionsTotal | number:'':'cs'}} Kč
+            </div>
+        </div>
+
+    </div>
+</div>

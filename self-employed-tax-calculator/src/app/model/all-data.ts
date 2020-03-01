@@ -1,0 +1,22 @@
+export interface AllData {
+    income: number,
+    expenseWay: string,
+    expense: number,
+    taxBasis: number,
+    notBasisTotal: number,
+    taxBasisWithout: number,
+    roundedTaxBasisWithout: number,
+    taxAmount: number,
+    discountsTotal: number,
+    taxAfterDiscounts: number,
+    insuranceBasis: number,
+    socialInsurance: number,
+    healthInsurance: number,
+    contributionsTotal: number,
+    taxAfterDeposit: number,
+    netAnnualIncome: number,
+    netMonthIncome: number,
+    netAnnualIncomeAfterExpenses: number,
+    netMonthIncomeAfterExpenses: number,
+    saving: boolean
+}

@@ -1,0 +1,23 @@
+.line {
+    padding: 2px;
+    font-weight: 500;
+    text-align: right;
+}
+
+.note {
+    font-size: 16px;
+    color: #b20000;
+}
+
+.notes {
+    font-size: 10px;
+    color: #b20000;
+}
+
+
+input.ng-invalid.ng-touched {
+    border: 1px solid #b20000;
+}
+
+
+

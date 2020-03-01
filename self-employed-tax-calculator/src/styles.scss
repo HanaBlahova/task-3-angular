@@ -1,0 +1,106 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+$font-color:#001833;
+$headline-font-color: #003d7f;
+$light-font-color: 	#ffffff	;
+$container-color:#e5f1ff;
+$button-color: #003d7f;
+$dark-color:#001833;
+$hover-2-color:	#004999;
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Arial";
+    font-size: 14px;
+    color: $font-color;
+}
+
+.bold {
+    font-weight: 550;
+}
+
+.container {
+    padding: 20px;
+    background: $container-color;
+    margin-bottom: 20px;
+}
+
+
+    h1 {
+        color: $headline-font-color;
+        font-size: 28px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    h2 {
+        color: $headline-font-color;
+        font-size: 24px;
+        padding: 10px 0px;
+        font-weight: bold;
+    }
+
+    h3 {
+        color: $headline-font-color;
+        font-size: 18px;
+    }
+
+    a {
+        color: $font-color;
+    }
+
+        a:hover {
+            background-color: $dark-color;
+            color: $light-font-color;
+        }
+    
+    input {
+        box-shadow: none !important;
+        border: 1px solid $hover-2-color;
+    }
+
+        input:focus {
+            box-shadow: none !important;
+            border: 1px solid $hover-2-color !important;
+        }
+
+    #select {
+        box-shadow: none;
+    }
+
+        #select:active, #select:target, #select:focus {
+            border: 1px solid $hover-2-color !important;
+
+        }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        border: 1px solid $dark-color;
+        border-radius: 0px;
+    }
+
+    .btn-primary {
+        background-color: $button-color;
+        color: $light-font-color;
+        border: $dark-color;
+        margin: 10px auto;
+    }
+
+        .btn-primary:hover, .btn-primary:checked, .btn-primary:active, .btn-primary:target, .btn-primary:focus, .btn-primary:disabled, .btn-primary.is-disabled {
+            background-color: $dark-color !important;
+            border: 1px solid $dark-color !important;
+            box-shadow: none !important;
+        }
+
+
+
+
+
+
+
+
